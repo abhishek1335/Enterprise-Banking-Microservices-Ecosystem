@@ -1,0 +1,57 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/banking_auth
+    username: ${DB_USERNAME:banking}
+    password: ${DB_PASSWORD:banking}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+
+banking:
+  jwt:
+    secret: ${JWT_SECRET:change-me-use-32-char-minimum-secret-key-for-hs256-banking}
+    issuer: ${JWT_ISSUER:banking-system}
+    expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.banking.auth: DEBUG
+    org.springframework.security: INFO

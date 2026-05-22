@@ -1,0 +1,3 @@
+com/banking/gateway/util/JwtUtilTest.class
+com/banking/gateway/filter/JwtAuthenticationFilterIT.class
+com/banking/gateway/ApiGatewayApplicationTests.class

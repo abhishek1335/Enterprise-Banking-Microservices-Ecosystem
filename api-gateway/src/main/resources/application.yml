@@ -1,0 +1,70 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/v1/auth/**
+        - id: account-service
+          uri: lb://account-service
+          predicates:
+            - Path=/api/v1/accounts/**
+        - id: transaction-service
+          uri: lb://transaction-service
+          predicates:
+            - Path=/api/v1/transactions/**
+        - id: loan-service
+          uri: lb://loan-service
+          predicates:
+            - Path=/api/v1/loans/**
+        - id: fraud-detection-service
+          uri: lb://fraud-detection-service
+          predicates:
+            - Path=/api/v1/fraud/**
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/v1/notifications/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka/}
+
+banking:
+  jwt:
+    secret: ${JWT_SECRET:change-me-use-32-char-minimum-secret-key-for-hs256-banking}
+    issuer: ${JWT_ISSUER:banking-system}
+    public-paths:
+      - /api/v1/auth/register
+      - /api/v1/auth/login
+      - /actuator/health
+      - /actuator/info
+  rate-limit:
+    enabled: true
+    replenish-per-second: 20
+    burst-capacity: 40
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    com.banking.gateway: DEBUG
