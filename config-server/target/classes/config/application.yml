@@ -1,0 +1,23 @@
+# Fallback copy bundled in JAR — primary source is project-root ../config/
+# Shared defaults for every microservice (merged with service-specific YAML)
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+logging:
+  level:
+    com.banking: INFO
