@@ -1,0 +1,18 @@
+package com.banking.transaction;
+
+import com.banking.transaction.config.JwtProperties;
+import com.banking.transaction.config.KafkaProperties;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+@SpringBootApplication
+@EnableFeignClients
+@EnableConfigurationProperties({JwtProperties.class, KafkaProperties.class})
+public class TransactionServiceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(TransactionServiceApplication.class, args);
+    }
+}

@@ -1,0 +1,2 @@
+com/banking/transaction/service/TransactionServiceTest.class
+com/banking/transaction/event/KafkaTransactionEventPublisherIT.class
